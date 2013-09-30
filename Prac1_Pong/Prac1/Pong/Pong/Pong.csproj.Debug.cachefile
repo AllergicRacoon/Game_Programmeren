@@ -1,0 +1,11 @@
+Content\UI\gameFont.xnb
+Content\GameObjects\paddleLeft.xnb
+Content\GameObjects\paddleRight.xnb
+Content\GameObjects\ball.xnb
+Content\UI\background.xnb
+Content\UI\lives.xnb
+Content\GameObjects\collisionMask.xnb
+Content\GameObjects\disco.xnb
+Content\UI\startScreen.xnb
+Content\Sound\bg_music.xnb
+Content\Sound\bg_music.wma
