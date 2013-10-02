@@ -1,0 +1,8 @@
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\block.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SpelFont.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\TetrisPrac.exe
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\TetrisPrac.pdb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.csprojResolveAssemblyReference.cache
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.exe
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.pdb
