@@ -5,53 +5,72 @@ using Microsoft.Xna.Framework.Graphics;
 /*
  * a class for representing the Tetris playing grid
  */
-class TetrisGrid
+namespace TetrisPrac
 {
-    public TetrisGrid(Texture2D b)
+    class TetrisGrid
     {
-        gridblock = b;
-        position = Vector2.Zero;
-        this.Clear();
-    }
+        public TetrisGrid(Texture2D b)
+        {
+            levelGrid = new Color[Width, Height];
+            gridblock = b;
+            position = Vector2.Zero;
+            this.Clear();
+        }
 
-    /*
-     * sprite for representing a single grid block
-     */
-    Texture2D gridblock;
+        /*
+         * sprite for representing a single grid block
+         */
+        Texture2D gridblock;
 
-    /*
-     * the position of the tetris grid
-     */
-    Vector2 position;
+        Color[,] levelGrid;
 
-    /*
-     * width in terms of grid elements
-     */
-    public int Width
-    {
-        get { return 12; }
-    }
+        /*
+         * the position of the tetris grid
+         */
+        Vector2 position;
 
-    /*
-     * height in terms of grid elements
-     */
-    public int Height
-    {
-        get { return 20; }
-    }
+        /*
+         * width in terms of grid elements
+         */
+        public int Width
+        {
+            get { return 12; }
+        }
 
-    /*
-     * clears the grid
-     */
-    public void Clear()
-    {
-    }
+        /*
+         * height in terms of grid elements
+         */
+        public int Height
+        {
+            get { return 20; }
+        }
 
-    /*
-     * draws the grid on the screen
-     */
-    public void Draw(GameTime gameTime, SpriteBatch s)
-    {
+        /*
+         * clears the grid
+         */
+        public void Clear()
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                for (int i = 0; i < Width; i++)
+                {
+                    levelGrid[i, j] = Color.White;
+                }
+            }
+        }
+
+        /*
+         * draws the grid on the screen
+         */
+        public void Draw(GameTime gameTime, SpriteBatch s)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                for (int i = 0; i < Width; i++)
+                {
+                    s.Draw(gridblock, new Vector2(i * gridblock.Width, j * gridblock.Height), levelGrid[i, j]);
+                }
+            }
+        }
     }
 }
-

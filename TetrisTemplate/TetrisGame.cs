@@ -1,54 +1,56 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-class TetrisGame : Game
+namespace TetrisPrac
 {
-    SpriteBatch spriteBatch;
-    InputHelper inputHelper;
-    GameWorld gameWorld;
-
-    static void Main(string[] args)
+    class TetrisGame : Game
     {
-        TetrisGame game = new TetrisGame();
-        game.Run();
-    }
+        SpriteBatch spriteBatch;
+        InputHelper inputHelper;
+        GameWorld gameWorld;
 
-    public TetrisGame()
-    {        
-        // initialize the graphics device
-        GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
-        
-        // set the directory where game assets are located
-        this.Content.RootDirectory = "Content";
-        
-        // set the desired window size
-        graphics.PreferredBackBufferWidth = 800;
-        graphics.PreferredBackBufferHeight = 600;
+        static void Main(string[] args)
+        {
+            TetrisGame game = new TetrisGame();
+            game.Run();
+        }
 
-        // create the input helper object
-        inputHelper = new InputHelper();
-    }
+        public TetrisGame()
+        {
+            // initialize the graphics device
+            GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
 
-    protected override void LoadContent()
-    {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
+            // set the directory where game assets are located
+            this.Content.RootDirectory = "Content";
 
-        // create and reset the game world
-        gameWorld = new GameWorld(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, Content);
-        gameWorld.Reset();
-    }
+            // set the desired window size
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
 
-    protected override void Update(GameTime gameTime)
-    {
-        inputHelper.Update(gameTime);
-        gameWorld.HandleInput(gameTime, inputHelper);
-        gameWorld.Update(gameTime);
-    }
+            // create the input helper object
+            inputHelper = new InputHelper();
+        }
 
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.White);
-        gameWorld.Draw(gameTime, spriteBatch);
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // create and reset the game world
+            gameWorld = new GameWorld(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, Content);
+            gameWorld.Reset();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            inputHelper.Update(gameTime);
+            gameWorld.HandleInput(gameTime, inputHelper);
+            gameWorld.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.White);
+            gameWorld.Draw(gameTime, spriteBatch);
+        }
     }
 }
-
