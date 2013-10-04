@@ -50,6 +50,8 @@ namespace TetrisPrac
             gridblock = b;
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
+            timeToMove = 0.25d;
+            activeBlock = RandomBlock();
             this.Clear();
         }
 
@@ -86,6 +88,14 @@ namespace TetrisPrac
 
         public void Update(GameTime gameTime)
         {
+            for (int j = 0; j < Height; j++)
+            {
+                for (int i = 0; i < Width; i++)
+                {
+                    fullGrid[i, j] = landedGrid[i, j]; //resets the full grid so it doesn't include moving block position
+                }
+            }
+
             for (int j = 0; j < activeBlock.arraySize; j++)
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
@@ -96,13 +106,69 @@ namespace TetrisPrac
                     }
                 }
             }
+            Console.WriteLine(blockPosition.Y);
             moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            
+
             if (moveTimer > timeToMove)
             {
                 moveTimer = 0;
-                blockPosition.Y += 1; //todo add collision check
+                if (canMove((int)blockPosition.X, (int)blockPosition.Y + 1))
+                {
+                    blockPosition.Y += 1; //todo add collision check
+                }
+                else
+                {
+                    
+                }
+                
             }
-            moveTimer = 0; //In the original Tetris your blocks don't fall if you rotate (+ it works and looks better)
+           
         }
+
+
+        public bool canMove(int x, int y)
+        {
+
+            for (int j = 0; j < activeBlock.arraySize; j++)
+            {
+                for (int i = 0; i < activeBlock.arraySize; i++)
+                {
+                    if (activeBlock.blockArray[i, j] && (x + i > Width || x + i < 0 || y + j > Height)) //is there a block outside the grid?
+                    {
+                        if (landedGrid[x + i, y + j] != Color.White) //is there a block already there
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public TetrisBlock RandomBlock()
+        {
+            int randomValue = GameWorld.Random.Next(7);
+            switch (randomValue)
+            {
+                case 0:
+                    return new JBlock(gridblock);
+                case 1:
+                    return new LBlock(gridblock);
+                case 2:
+                    return new SBlock(gridblock);
+                case 3:
+                    return new SquareBlock(gridblock);
+                case 4:
+                    return new TallBlock(gridblock);
+                case 5:
+                    return new TBlock(gridblock);
+                case 6:
+                    return new ZBlock(gridblock);
+            }
+            return new LBlock(gridblock);
+        }
+
     }
 }

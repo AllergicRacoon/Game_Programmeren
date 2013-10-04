@@ -28,7 +28,7 @@ namespace TetrisPrac
         /*
          * random number generator
          */
-        Random random;
+        static Random random;
 
         /*
          * main game font
@@ -96,32 +96,9 @@ namespace TetrisPrac
             spriteBatch.DrawString(font, text, positie, Color.Blue);
         }
 
-        public Random Random
+        public static Random Random
         {
             get { return random; }
-        }
-
-        public TetrisBlock RandomBlock()
-        {
-            int randomValue = random.Next(7);
-            switch (randomValue)
-            {
-                case 0:
-                    return new JBlock(block);
-                case 1:
-                    return new LBlock(block);
-                case 2:
-                    return new SBlock(block);
-                case 3:
-                    return new SquareBlock(block);
-                case 4:
-                    return new TallBlock(block);
-                case 5:
-                    return new TBlock(block);
-                case 6:
-                    return new ZBlock(block);
-            }
-            return new LBlock(block);
         }
     }
 }
