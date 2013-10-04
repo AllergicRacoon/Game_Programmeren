@@ -7,7 +7,7 @@ namespace TetrisPrac
     {
         SpriteBatch spriteBatch;
         InputHelper inputHelper;
-        GameWorld gameWorld;
+        public static GameWorld gameWorld;
 
         static void Main(string[] args)
         {
@@ -45,6 +45,7 @@ namespace TetrisPrac
             inputHelper.Update(gameTime);
             gameWorld.HandleInput(gameTime, inputHelper);
             gameWorld.Update(gameTime);
+            
         }
 
         protected override void Draw(GameTime gameTime)
@@ -52,5 +53,7 @@ namespace TetrisPrac
             GraphicsDevice.Clear(Color.White);
             gameWorld.Draw(gameTime, spriteBatch);
         }
+
+        
     }
 }

@@ -8,6 +8,7 @@ namespace TetrisPrac
     {
         public TallBlock(Texture2D tex) : base(tex)
         {
+            arraySize = 4;
             blockColor = Color.Pink;
             blockArray = new bool[4,4] {
             {false, true, false, false},

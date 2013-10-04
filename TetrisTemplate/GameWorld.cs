@@ -50,8 +50,6 @@ namespace TetrisPrac
          */
         TetrisGrid grid;
 
-        TetrisBlock activeBlock;
-
         public GameWorld(int width, int height, ContentManager Content)
         {
             screenWidth = width;
@@ -62,33 +60,31 @@ namespace TetrisPrac
             block = Content.Load<Texture2D>("block");
             font = Content.Load<SpriteFont>("SpelFont");
 
-            activeBlock = new LBlock(block);
-            activeBlock.gridPosition = new Vector2(2, 2);
-
             grid = new TetrisGrid(block);
         }
 
         public void Reset()
         {
+            grid.Clear();
         }
 
         public void HandleInput(GameTime gameTime, InputHelper inputHelper)
         {
-            if (inputHelper.KeyPressed(Keys.Up, false))
+            if (inputHelper.KeyPressed(Keys.R, false))
             {
-                activeBlock.RotateCW();
+                Reset();
             }
         }
 
         public void Update(GameTime gameTime)
         {
+            grid.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
             grid.Draw(gameTime, spriteBatch);
-            activeBlock.Draw(gameTime, spriteBatch);
             spriteBatch.End();    
         }
 
@@ -103,6 +99,29 @@ namespace TetrisPrac
         public Random Random
         {
             get { return random; }
+        }
+
+        public TetrisBlock RandomBlock()
+        {
+            int randomValue = random.Next(7);
+            switch (randomValue)
+            {
+                case 0:
+                    return new JBlock(block);
+                case 1:
+                    return new LBlock(block);
+                case 2:
+                    return new SBlock(block);
+                case 3:
+                    return new SquareBlock(block);
+                case 4:
+                    return new TallBlock(block);
+                case 5:
+                    return new TBlock(block);
+                case 6:
+                    return new ZBlock(block);
+            }
+            return new LBlock(block);
         }
     }
 }

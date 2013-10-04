@@ -4,16 +4,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TetrisPrac
 {
-    class LBlock : TetrisBlock
+    class JBlock : TetrisBlock
     {
-        public LBlock(Texture2D tex) : base(tex)
+        public JBlock(Texture2D tex) : base(tex)
         {
+            arraySize = 3;
             blockColor = Color.Yellow;
-            blockArray = new bool[4,4] {
-            {false, false, false, false},
-            {false, true, false, false},
-            {false, true, false, false},
-            {false, true, true, false}};
+            blockArray = new bool[3, 3] {
+            {false, true, false},
+            {false, true, false},
+            {true, true, false}};
         }
     }
 }
