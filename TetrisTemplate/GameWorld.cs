@@ -74,6 +74,7 @@ namespace TetrisPrac
             {
                 Reset();
             }
+            grid.HandleInput(gameTime, inputHelper);
         }
 
         public void Update(GameTime gameTime)

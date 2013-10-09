@@ -30,8 +30,20 @@ namespace TetrisPrac
                 }
             }
             blockArray = temp;
+        }
+        public void RotateCCW()
+        {
+            bool[,] temp = new bool[arraySize, arraySize];
+            for (int i = 0; i < arraySize; i++)
+            {
+                for (int j = 0; j < arraySize; j++)
+                {
+                    temp[i, j] = blockArray[arraySize - j - 1, i];
 
-            
+                }
+            }
+
+            blockArray = temp;
         }
 
         

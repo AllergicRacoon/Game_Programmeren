@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 /*
  * a class for representing the Tetris playing grid
@@ -50,8 +51,8 @@ namespace TetrisPrac
             gridblock = b;
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
+            ResetActiveBlock();
             timeToMove = 0.25d;
-            activeBlock = RandomBlock();
             this.Clear();
         }
 
@@ -100,51 +101,160 @@ namespace TetrisPrac
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
                 {
-                    if (activeBlock.blockArray[i, j])
+                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
                     {
                         fullGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
                     }
                 }
             }
-            Console.WriteLine(blockPosition.Y);
-            moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
             
+            moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
 
             if (moveTimer > timeToMove)
             {
                 moveTimer = 0;
                 if (canMove((int)blockPosition.X, (int)blockPosition.Y + 1))
                 {
-                    blockPosition.Y += 1; //todo add collision check
+                    blockPosition.Y += 1;
                 }
                 else
                 {
-                    
+                    for (int j = 0; j < activeBlock.arraySize; j++)
+                    {
+                        for (int i = 0; i < activeBlock.arraySize; i++)
+                        {
+                            if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                            {
+                                landedGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                            }
+                        }
+                    }
+
+                    ResetActiveBlock();
                 }
-                
             }
-           
+
+            checkRows(); //checks if there are any full rows and shifts the gamefield down if there is one or more full rows
+        }
+
+        public void checkRows()
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                bool isRowFull = true;
+                for (int i = 0; i < Width; i++)
+                {
+                    if (landedGrid[i, j] == Color.White)
+                    {
+                        isRowFull = false; //if one of the cells is not coloured than the row is not full
+                        break; //we don't need to check if any other cells aren't full either
+                    }
+                }
+
+                if (isRowFull) //shift array down 
+                {
+                    for (int w = j; w >= 0; w--)
+                    {
+                        for (int v = 0; v < Width; v++)
+                        {
+                            if (w != 0)
+                            {
+                                landedGrid[v, w] = landedGrid[v, w - 1];
+                            }
+                            else
+                            {
+                                landedGrid[v, w] = Color.White;
+                            }
+
+                        }
+                    }
+                }
+            }
         }
 
 
         public bool canMove(int x, int y)
         {
-
             for (int j = 0; j < activeBlock.arraySize; j++)
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
                 {
-                    if (activeBlock.blockArray[i, j] && (x + i > Width || x + i < 0 || y + j > Height)) //is there a block outside the grid?
+                    if (activeBlock.blockArray[i, j]) //is there a block in the tetrisblock array?
                     {
-                        if (landedGrid[x + i, y + j] != Color.White) //is there a block already there
+                        if (x + i < Width && x + i >= 0 && y + j < Height) //is it within bounds?
+                        {
+                            if (landedGrid[x + i, y + j] != Color.White) //is there a block already there
+                            {
+                                return false;
+                            }
+                        } else
                         {
                             return false;
                         }
+                        
                     }
                 }
             }
 
             return true;
+        }
+
+        public bool canRotate()
+        {
+            bool[,] temp = activeBlock.blockArray;
+
+            activeBlock.RotateCW();
+            
+            if (canMove((int)blockPosition.X, (int)blockPosition.Y))
+            {
+                activeBlock.blockArray = temp;
+                return true;
+            }
+            else
+            {
+                activeBlock.blockArray = temp;
+                return false;
+            }
+
+        }
+
+
+
+        public void HandleInput(GameTime gameTime, InputHelper inputHelper)
+        {
+            if (inputHelper.KeyPressed(Keys.Left, false))
+            {
+                if (canMove((int)blockPosition.X-1, (int)blockPosition.Y))
+                {
+                    blockPosition.X--;
+                }
+            
+            }
+            if (inputHelper.KeyPressed(Keys.Right, false))
+            {
+                if (canMove((int)blockPosition.X + 1, (int)blockPosition.Y))
+                {
+                    blockPosition.X++;
+                }
+
+            }
+            if (inputHelper.KeyPressed(Keys.Up, false))
+            {
+                if (canRotate())
+                {
+                    activeBlock.RotateCW();
+                }
+            }
+
+
+        }
+
+        public void ResetActiveBlock()
+        {
+            activeBlock = RandomBlock();
+            blockPosition.Y = 0;
+            blockPosition.X = Width/2-2;
         }
 
         public TetrisBlock RandomBlock()
@@ -167,6 +277,7 @@ namespace TetrisPrac
                 case 6:
                     return new ZBlock(gridblock);
             }
+            Console.WriteLine("LBLOCKBITCHES");
             return new LBlock(gridblock);
         }
 
