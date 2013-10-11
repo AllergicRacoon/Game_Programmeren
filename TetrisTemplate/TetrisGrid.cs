@@ -24,10 +24,13 @@ namespace TetrisPrac
 
         Vector2 blockPosition;
 
-        TetrisBlock activeBlock;
+        TetrisBlock activeBlock, nextBlock;
 
         protected double moveTimer, timeToMove;
 
+        public bool gameOver;
+
+        int blockCount;
         /*
          * width in terms of grid elements
          */
@@ -51,9 +54,10 @@ namespace TetrisPrac
             gridblock = b;
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
-            ResetActiveBlock();
             timeToMove = 0.25d;
-            this.Clear();
+            
+            activeBlock = RandomBlock();
+            Reset();
         }
 
 
@@ -72,6 +76,12 @@ namespace TetrisPrac
                 }
             }
         }
+        public void Reset()
+        {
+            Clear();
+            ResetActiveBlock();
+            gameOver = false;
+        }
 
         /*
          * draws the grid on the screen
@@ -83,6 +93,16 @@ namespace TetrisPrac
                 for (int i = 0; i < Width; i++)
                 {
                     s.Draw(gridblock, new Vector2(i * gridblock.Width, j * gridblock.Height), fullGrid[i, j]);
+                }
+            }
+            for (int j = 0; j < nextBlock.arraySize; j++)
+            {
+                for (int i = 0; i < nextBlock.arraySize; i++)
+                {
+                    if (nextBlock.blockArray[i, j])
+                    {
+                        s.Draw(gridblock, new Vector2((i + 13) * gridblock.Width, j * gridblock.Height), nextBlock.blockColor);
+                    }
                 }
             }
         }
@@ -120,22 +140,31 @@ namespace TetrisPrac
                 }
                 else
                 {
-                    for (int j = 0; j < activeBlock.arraySize; j++)
+                    if (blockPosition.Y == 0)
                     {
-                        for (int i = 0; i < activeBlock.arraySize; i++)
+                        gameOver = true;
+                    }
+                    else
+                    {
+                        for (int j = 0; j < activeBlock.arraySize; j++)
                         {
-                            if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                            for (int i = 0; i < activeBlock.arraySize; i++)
                             {
-                                landedGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                                if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                                {
+                                    landedGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                                }
                             }
                         }
+                        blockCount++;
+                        ResetActiveBlock();
                     }
-
-                    ResetActiveBlock();
                 }
+
             }
 
             checkRows(); //checks if there are any full rows and shifts the gamefield down if there is one or more full rows
+            timeToMove = 0.25d - (blockCount / 2)*0.05;
         }
 
         public void checkRows()
@@ -246,13 +275,22 @@ namespace TetrisPrac
                     activeBlock.RotateCW();
                 }
             }
-
-
+            /*
+            if (inputHelper.IsKeyDown(Keys.Down))
+            {
+                timeToMove = 0.10d;
+            }
+            else 
+            {
+                timeToMove = 0.25d;
+            }
+            */
         }
 
         public void ResetActiveBlock()
         {
-            activeBlock = RandomBlock();
+            activeBlock = nextBlock;
+            nextBlock = RandomBlock();
             blockPosition.Y = 0;
             blockPosition.X = Width/2-2;
         }
@@ -277,7 +315,6 @@ namespace TetrisPrac
                 case 6:
                     return new ZBlock(gridblock);
             }
-            Console.WriteLine("LBLOCKBITCHES");
             return new LBlock(gridblock);
         }
 

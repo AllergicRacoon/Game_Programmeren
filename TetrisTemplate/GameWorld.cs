@@ -65,7 +65,7 @@ namespace TetrisPrac
 
         public void Reset()
         {
-            grid.Clear();
+            grid.Reset();
         }
 
         public void HandleInput(GameTime gameTime, InputHelper inputHelper)
@@ -73,19 +73,31 @@ namespace TetrisPrac
             if (inputHelper.KeyPressed(Keys.R, false))
             {
                 Reset();
+                gameState = GameState.Playing;
             }
             grid.HandleInput(gameTime, inputHelper);
         }
 
         public void Update(GameTime gameTime)
         {
-            grid.Update(gameTime);
+            if (gameState == GameState.Playing)
+            {
+                grid.Update(gameTime);
+                if (grid.gameOver)
+                {
+                    gameState = GameState.GameOver; 
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
             grid.Draw(gameTime, spriteBatch);
+            if (gameState == GameState.GameOver)
+            {
+                DrawText("Game Over Loser.\nMuhahaha\npress r to restart.", new Vector2(screenWidth, screenHeight) / 2, spriteBatch);
+            }
             spriteBatch.End();    
         }
 
