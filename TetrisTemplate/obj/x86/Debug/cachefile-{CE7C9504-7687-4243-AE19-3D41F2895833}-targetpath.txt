@@ -1,2 +1,3 @@
 Content\block.xnb
 Content\SpelFont.xnb
+Content\EmptyBlock.xnb

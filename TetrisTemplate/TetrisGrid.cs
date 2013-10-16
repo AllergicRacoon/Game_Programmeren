@@ -10,16 +10,10 @@ namespace TetrisPrac
 {
     class TetrisGrid
     {
-        /*
-         * sprite for representing a single grid block
-         */
-        Texture2D gridblock;
+        Texture2D gridblock, emptyBlock; //texture for block
 
-        Color[,] landedGrid, fullGrid;
+        Color[,] levelGrid;
 
-        /*
-         * the position of the tetris grid
-         */
         Vector2 position;
 
         Vector2 blockPosition;
@@ -36,7 +30,7 @@ namespace TetrisPrac
          */
         public int Width
         {
-            get { return 12; }
+            get { return 7; }
         }
 
         /*
@@ -44,14 +38,14 @@ namespace TetrisPrac
          */
         public int Height
         {
-            get { return 20; }
+            get { return 14; }
         }
 
-        public TetrisGrid(Texture2D b)
+        public TetrisGrid(Texture2D b, Texture2D empty)
         {
-            fullGrid = new Color[Width, Height];
-            landedGrid = new Color[Width, Height];
+            levelGrid = new Color[Width, Height];
             gridblock = b;
+            emptyBlock = empty;
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
             timeToMove = 0.25d;
@@ -71,11 +65,11 @@ namespace TetrisPrac
             {
                 for (int i = 0; i < Width; i++)
                 {
-                    fullGrid[i, j] = Color.White;
-                    landedGrid[i, j] = Color.White;
+                    levelGrid[i, j] = Color.White;
                 }
             }
         }
+
         public void Reset()
         {
             Clear();
@@ -92,75 +86,42 @@ namespace TetrisPrac
             {
                 for (int i = 0; i < Width; i++)
                 {
-                    s.Draw(gridblock, new Vector2(i * gridblock.Width, j * gridblock.Height), fullGrid[i, j]);
-                }
-            }
-            for (int j = 0; j < nextBlock.arraySize; j++)
-            {
-                for (int i = 0; i < nextBlock.arraySize; i++)
-                {
-                    if (nextBlock.blockArray[i, j])
-                    {
-                        s.Draw(gridblock, new Vector2((i + 13) * gridblock.Width, j * gridblock.Height), nextBlock.blockColor);
-                    }
+                    if (levelGrid[i,j] == Color.White)
+                        s.Draw(emptyBlock, new Vector2(i * gridblock.Width, j * gridblock.Height), Color.Gray);
+                    else
+                        s.Draw(gridblock, new Vector2(i * gridblock.Width, j * gridblock.Height), levelGrid[i, j]);       
                 }
             }
         }
 
         public void Update(GameTime gameTime)
         {
-            for (int j = 0; j < Height; j++)
-            {
-                for (int i = 0; i < Width; i++)
-                {
-                    fullGrid[i, j] = landedGrid[i, j]; //resets the full grid so it doesn't include moving block position
-                }
-            }
-
-            for (int j = 0; j < activeBlock.arraySize; j++)
-            {
-                for (int i = 0; i < activeBlock.arraySize; i++)
-                {
-                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
-                    {
-                        fullGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
-                    }
-                }
-            }
-            
             moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            
+            putBlockInGrid();
 
 
-            if (moveTimer > timeToMove)
+            if (moveTimer > timeToMove) //if it's time to drop
             {
                 moveTimer = 0;
                 if (canMove((int)blockPosition.X, (int)blockPosition.Y + 1))
                 {
+                    removeBlockFromGrid();
                     blockPosition.Y += 1;
+                    putBlockInGrid();
                 }
                 else
                 {
-                    if (blockPosition.Y == 0)
+                    if (blockPosition.Y == 0) //if we can't move and the block y is 0 then we lose
                     {
-                        gameOver = true;
+                        gameOver = true; //the gameworld checks if this variable is true to set the gameState accordingly
                     }
                     else
                     {
-                        for (int j = 0; j < activeBlock.arraySize; j++)
-                        {
-                            for (int i = 0; i < activeBlock.arraySize; i++)
-                            {
-                                if (activeBlock.blockArray[i, j]) //is there a block in the shape
-                                {
-                                    landedGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
-                                }
-                            }
-                        }
                         blockCount++;
                         ResetActiveBlock();
                     }
                 }
-
             }
 
             checkRows(); //checks if there are any full rows and shifts the gamefield down if there is one or more full rows
@@ -174,7 +135,7 @@ namespace TetrisPrac
                 bool isRowFull = true;
                 for (int i = 0; i < Width; i++)
                 {
-                    if (landedGrid[i, j] == Color.White)
+                    if (levelGrid[i, j] == Color.White)
                     {
                         isRowFull = false; //if one of the cells is not coloured than the row is not full
                         break; //we don't need to check if any other cells aren't full either
@@ -189,11 +150,11 @@ namespace TetrisPrac
                         {
                             if (w != 0)
                             {
-                                landedGrid[v, w] = landedGrid[v, w - 1];
+                                levelGrid[v, w] = levelGrid[v, w - 1];
                             }
                             else
                             {
-                                landedGrid[v, w] = Color.White;
+                                levelGrid[v, w] = Color.White;
                             }
 
                         }
@@ -202,9 +163,38 @@ namespace TetrisPrac
             }
         }
 
+        public void putBlockInGrid()
+        {
+            for (int j = 0; j < activeBlock.arraySize; j++)
+            {
+                for (int i = 0; i < activeBlock.arraySize; i++)
+                {
+                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                    {
+                        levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                    }
+                }
+            }
+        }
+
+        public void removeBlockFromGrid()
+        {
+            for (int j = 0; j < activeBlock.arraySize; j++)
+            {
+                for (int i = 0; i < activeBlock.arraySize; i++)
+                {
+                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                    {
+                        levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = Color.White;
+                    }
+                }
+            }
+        }
 
         public bool canMove(int x, int y)
         {
+            removeBlockFromGrid();
+
             for (int j = 0; j < activeBlock.arraySize; j++)
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
@@ -213,12 +203,14 @@ namespace TetrisPrac
                     {
                         if (x + i < Width && x + i >= 0 && y + j < Height) //is it within bounds?
                         {
-                            if (landedGrid[x + i, y + j] != Color.White) //is there a block already there
+                            if (levelGrid[x + i, y + j] != Color.White) //is there a block already there
                             {
+                                putBlockInGrid();
                                 return false;
                             }
                         } else
                         {
+                            putBlockInGrid();
                             return false;
                         }
                         
@@ -233,6 +225,7 @@ namespace TetrisPrac
         {
             bool[,] temp = activeBlock.blockArray;
 
+            removeBlockFromGrid();
             activeBlock.RotateCW();
             
             if (canMove((int)blockPosition.X, (int)blockPosition.Y))
@@ -273,8 +266,10 @@ namespace TetrisPrac
                 if (canRotate())
                 {
                     activeBlock.RotateCW();
+
                 }
             }
+
             /*
             if (inputHelper.IsKeyDown(Keys.Down))
             {

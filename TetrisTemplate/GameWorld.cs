@@ -38,7 +38,7 @@ namespace TetrisPrac
         /*
          * sprite for representing a single tetris block element
          */
-        Texture2D block;
+        Texture2D block, emptyBlock;
 
         /*
          * the current game state
@@ -58,9 +58,10 @@ namespace TetrisPrac
             gameState = GameState.Playing;
 
             block = Content.Load<Texture2D>("block");
+            emptyBlock = Content.Load<Texture2D>("EmptyBlock");
             font = Content.Load<SpriteFont>("SpelFont");
 
-            grid = new TetrisGrid(block);
+            grid = new TetrisGrid(block, emptyBlock);
         }
 
         public void Reset()

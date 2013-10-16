@@ -6,3 +6,4 @@ C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.exe
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.pdb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\EmptyBlock.xnb

@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\block.xnb</Output>
-      <Time>2010-09-18T13:41:50+02:00</Time>
+      <Time>2013-10-16T11:58:32.1699983+02:00</Time>
     </Item>
     <Item>
       <Source>SpelFont.spritefont</Source>
@@ -18,6 +18,15 @@
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SpelFont.xnb</Output>
       <Time>2010-09-18T17:04:46+02:00</Time>
+    </Item>
+    <Item>
+      <Source>EmptyBlock.png</Source>
+      <Name>EmptyBlock</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\EmptyBlock.xnb</Output>
+      <Time>2013-10-16T11:56:52.8472289+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
