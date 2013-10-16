@@ -44,7 +44,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameHUD.xnb</Output>
-      <Time>2013-10-16T11:47:19.9187549+02:00</Time>
+      <Time>2013-10-16T16:08:50.8457176+02:00</Time>
     </Item>
     <Item>
       <Source>SmallBlock.png</Source>
@@ -54,6 +54,24 @@
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SmallBlock.xnb</Output>
       <Time>2013-10-16T11:55:15.3178954+02:00</Time>
+    </Item>
+    <Item>
+      <Source>GameBackground.png</Source>
+      <Name>GameBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameBackground.xnb</Output>
+      <Time>2013-10-16T16:08:19.6004384+02:00</Time>
+    </Item>
+    <Item>
+      <Source>SuspicionBar.png</Source>
+      <Name>SuspicionBar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SuspicionBar.xnb</Output>
+      <Time>2013-10-16T16:41:05.0168181+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

@@ -30,7 +30,12 @@ namespace TetrisPrac
          */
         static Random random;
 
-        Texture2D backgroundTex;
+        Texture2D backgroundTex, gradientTex, HUDTex, suspicionBarTex;
+
+        Vector2 suspicionBarOffset;
+
+        int suspicionBarMaxHeight, suspicionBarHeight, suspicionBarMaxWidth;
+        float suspicionValue;
 
         /*
          * main game font
@@ -57,7 +62,16 @@ namespace TetrisPrac
 
             font = Content.Load<SpriteFont>("SpelFont");
 
-            backgroundTex = Content.Load<Texture2D>("GameHUD");
+            backgroundTex = Content.Load<Texture2D>("GameBackground");
+            gradientTex = Content.Load<Texture2D>("GameGradient");
+            HUDTex = Content.Load<Texture2D>("GameHUD");
+            suspicionBarTex = Content.Load<Texture2D>("SuspicionBar");
+
+            suspicionBarOffset = new Vector2(574, 565);
+            suspicionBarMaxHeight = (int)suspicionBarOffset.Y - 174;
+            suspicionBarMaxWidth = 677 - (int)suspicionBarOffset.X;
+
+            suspicionValue = 0.8f;
 
             grid = new TetrisGrid(Content);
         }
@@ -74,7 +88,11 @@ namespace TetrisPrac
                 Reset();
                 gameState = GameState.Playing;
             }
-            grid.HandleInput(gameTime, inputHelper);
+
+            if (gameState == GameState.Playing)
+            {
+                grid.HandleInput(gameTime, inputHelper);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -92,7 +110,15 @@ namespace TetrisPrac
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+
+            spriteBatch.Draw(backgroundTex, Vector2.Zero, Color.White);
+            spriteBatch.Draw(gradientTex, Vector2.Zero, Color.White);
             grid.Draw(gameTime, spriteBatch);
+            suspicionBarHeight = (int)(suspicionBarMaxHeight*suspicionValue);
+            spriteBatch.Draw(suspicionBarTex, new Rectangle((int)suspicionBarOffset.X, (int)suspicionBarOffset.Y - suspicionBarHeight, suspicionBarMaxWidth, suspicionBarHeight), Color.White);
+            
+            spriteBatch.Draw(HUDTex, Vector2.Zero, Color.White);
+            
             if (gameState == GameState.GameOver)
             {
                 DrawText("Game Over Loser.\nMuhahaha\npress r to restart.", new Vector2(screenWidth, screenHeight) / 2, spriteBatch);

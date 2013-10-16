@@ -10,3 +10,5 @@ C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameGradient.xnb
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameHUD.xnb
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SmallBlock.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameBackground.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SuspicionBar.xnb

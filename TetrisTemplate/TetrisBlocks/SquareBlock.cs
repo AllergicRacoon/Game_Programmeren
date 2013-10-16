@@ -8,13 +8,11 @@ namespace TetrisPrac
     {
         public SquareBlock(Texture2D tex) : base(tex)
         {
-            arraySize = 4;
+            arraySize = 2;
             blockColor = Color.Purple;
-            blockArray = new bool[4,4] {
-            {false, false, false, false},
-            {false, true, true, false},
-            {false, true, true, false},
-            {false, false, false, false}};
+            blockArray = new bool[2,2] {
+            {true, true},
+            {true, true}};
         }
     }
 }

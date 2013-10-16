@@ -11,13 +11,17 @@ namespace TetrisPrac
 {
     class TetrisGrid
     {
-        Texture2D gridBlockTex, emptyBlockTex; //texture for block
+        Texture2D gridBlockTex, emptyBlockTex, smallBlockTex; //texture for block
+
+        float smallBlockScale, gameScale;
 
         Color[,] levelGrid;
 
         Vector2 position;
 
         Vector2 blockPosition;
+
+        Vector2 gridOffset, nextBlockOffset;
 
         TetrisBlock activeBlock, nextBlock;
 
@@ -31,7 +35,7 @@ namespace TetrisPrac
          */
         public int Width
         {
-            get { return 7; }
+            get { return 11; }
         }
 
         /*
@@ -47,6 +51,13 @@ namespace TetrisPrac
             levelGrid = new Color[Width, Height];
             gridBlockTex = content.Load<Texture2D>("Block");
             emptyBlockTex = content.Load<Texture2D>("EmptyBlock");
+            smallBlockTex = content.Load<Texture2D>("SmallBlock");
+
+            gridOffset = new Vector2(115, 37);
+            nextBlockOffset = new Vector2(600, 65);
+            smallBlockScale = 0.8f;
+
+            gameScale = 0.85f;
 
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
@@ -88,10 +99,20 @@ namespace TetrisPrac
             {
                 for (int i = 0; i < Width; i++)
                 {
-                    if (levelGrid[i,j] == Color.White)
-                        s.Draw(emptyBlockTex, new Vector2(i * emptyBlockTex.Width, j * emptyBlockTex.Height), Color.Gray);
+                    if (levelGrid[i, j] == Color.White)
+                        s.Draw(emptyBlockTex, new Vector2(i * emptyBlockTex.Width, j * emptyBlockTex.Height) * gameScale + gridOffset, null, Color.White, 0f, Vector2.Zero, gameScale, SpriteEffects.None, 0);
                     else
-                        s.Draw(gridBlockTex, new Vector2(i * gridBlockTex.Width, j * gridBlockTex.Height), levelGrid[i, j]);       
+                        s.Draw(gridBlockTex, new Vector2(i * gridBlockTex.Width, j * gridBlockTex.Height) * gameScale + gridOffset, null, levelGrid[i, j], 0f, Vector2.Zero, gameScale, SpriteEffects.None, 0);
+                }
+            }
+
+            for (int i = 0; i < nextBlock.arraySize; i++)
+            {
+                for (int j = 0; j < nextBlock.arraySize; j++)
+                {
+                    Vector2 halfOffset = new Vector2(nextBlock.arraySize*smallBlockTex.Width, nextBlock.arraySize*smallBlockTex.Height)/2;
+                    if (nextBlock.blockArray[i,j])
+                        s.Draw(smallBlockTex, new Vector2(i * smallBlockTex.Width * smallBlockScale, j * smallBlockTex.Height*smallBlockScale)*gameScale + nextBlockOffset, null, nextBlock.blockColor, 0f, halfOffset / 2, smallBlockScale, SpriteEffects.None, 0);
                 }
             }
         }
