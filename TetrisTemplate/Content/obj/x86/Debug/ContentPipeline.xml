@@ -28,6 +28,33 @@
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\EmptyBlock.xnb</Output>
       <Time>2013-10-16T11:56:52.8472289+02:00</Time>
     </Item>
+    <Item>
+      <Source>GameGradient.png</Source>
+      <Name>GameGradient</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameGradient.xnb</Output>
+      <Time>2013-10-16T11:47:54.0173395+02:00</Time>
+    </Item>
+    <Item>
+      <Source>GameHUD.png</Source>
+      <Name>GameHUD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameHUD.xnb</Output>
+      <Time>2013-10-16T11:47:19.9187549+02:00</Time>
+    </Item>
+    <Item>
+      <Source>SmallBlock.png</Source>
+      <Name>SmallBlock</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SmallBlock.xnb</Output>
+      <Time>2013-10-16T11:55:15.3178954+02:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

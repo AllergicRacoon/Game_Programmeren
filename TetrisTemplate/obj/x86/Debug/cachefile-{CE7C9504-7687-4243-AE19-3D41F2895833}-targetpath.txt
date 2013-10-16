@@ -1,3 +1,6 @@
 Content\block.xnb
 Content\SpelFont.xnb
 Content\EmptyBlock.xnb
+Content\GameGradient.xnb
+Content\GameHUD.xnb
+Content\SmallBlock.xnb

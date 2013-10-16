@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 /*
  * a class for representing the Tetris playing grid
@@ -10,7 +11,7 @@ namespace TetrisPrac
 {
     class TetrisGrid
     {
-        Texture2D gridblock, emptyBlock; //texture for block
+        Texture2D gridBlockTex, emptyBlockTex; //texture for block
 
         Color[,] levelGrid;
 
@@ -41,11 +42,12 @@ namespace TetrisPrac
             get { return 14; }
         }
 
-        public TetrisGrid(Texture2D b, Texture2D empty)
+        public TetrisGrid(ContentManager content)
         {
             levelGrid = new Color[Width, Height];
-            gridblock = b;
-            emptyBlock = empty;
+            gridBlockTex = content.Load<Texture2D>("Block");
+            emptyBlockTex = content.Load<Texture2D>("EmptyBlock");
+
             position = Vector2.Zero;
             blockPosition = new Vector2(2, 2);
             timeToMove = 0.25d;
@@ -87,9 +89,9 @@ namespace TetrisPrac
                 for (int i = 0; i < Width; i++)
                 {
                     if (levelGrid[i,j] == Color.White)
-                        s.Draw(emptyBlock, new Vector2(i * gridblock.Width, j * gridblock.Height), Color.Gray);
+                        s.Draw(emptyBlockTex, new Vector2(i * emptyBlockTex.Width, j * emptyBlockTex.Height), Color.Gray);
                     else
-                        s.Draw(gridblock, new Vector2(i * gridblock.Width, j * gridblock.Height), levelGrid[i, j]);       
+                        s.Draw(gridBlockTex, new Vector2(i * gridBlockTex.Width, j * gridBlockTex.Height), levelGrid[i, j]);       
                 }
             }
         }
@@ -97,18 +99,18 @@ namespace TetrisPrac
         public void Update(GameTime gameTime)
         {
             moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
-            
-            putBlockInGrid();
 
+            putBlockInGrid();
 
             if (moveTimer > timeToMove) //if it's time to drop
             {
                 moveTimer = 0;
-                if (canMove((int)blockPosition.X, (int)blockPosition.Y + 1))
+                
+
+                if (canMove((int)blockPosition.X, (int)blockPosition.Y + 1, false))
                 {
                     removeBlockFromGrid();
                     blockPosition.Y += 1;
-                    putBlockInGrid();
                 }
                 else
                 {
@@ -120,12 +122,13 @@ namespace TetrisPrac
                     {
                         blockCount++;
                         ResetActiveBlock();
+                        checkRows(); //checks if there are any full rows and shifts the gamefield down if there is one or more full rows
                     }
                 }
             }
 
-            checkRows(); //checks if there are any full rows and shifts the gamefield down if there is one or more full rows
-            timeToMove = 0.25d - (blockCount / 2)*0.05;
+            
+            //timeToMove = 0.25d - (blockCount / 2)*0.05;
         }
 
         public void checkRows()
@@ -169,31 +172,41 @@ namespace TetrisPrac
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
                 {
-                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                    if (i + blockPosition.X < Width && i + blockPosition.X >= 0 && j + blockPosition.Y < Height) //is it within bounds?
                     {
-                        levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                        if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                        {
+                            levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = activeBlock.blockColor;
+                        }
                     }
                 }
             }
         }
 
-        public void removeBlockFromGrid()
+        public void removeBlockFromGrid() //returns false if unsuccesful
         {
             for (int j = 0; j < activeBlock.arraySize; j++)
             {
                 for (int i = 0; i < activeBlock.arraySize; i++)
                 {
-                    if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                    if (i + blockPosition.X < Width && i + blockPosition.X >= 0 && j + blockPosition.Y < Height) //is it within bounds?
                     {
-                        levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = Color.White;
+                        if (activeBlock.blockArray[i, j]) //is there a block in the shape
+                        {
+                            levelGrid[i + (int)blockPosition.X, j + (int)blockPosition.Y] = Color.White;
+                        }
                     }
                 }
             }
         }
 
-        public bool canMove(int x, int y)
+
+        public bool canMove(int x, int y, bool rotate)
         {
-            removeBlockFromGrid();
+            if (!rotate) // we don't want to remove the rotated block from the grid if it was just rotated
+            {
+                removeBlockFromGrid();
+            }
 
             for (int j = 0; j < activeBlock.arraySize; j++)
             {
@@ -205,30 +218,38 @@ namespace TetrisPrac
                         {
                             if (levelGrid[x + i, y + j] != Color.White) //is there a block already there
                             {
-                                putBlockInGrid();
+                                if (!rotate) //if we fail, we don't want to put the rotated block back in the grid
+                                {
+                                    putBlockInGrid();
+                                }
                                 return false;
+
                             }
-                        } else
+                        }
+                        else
                         {
-                            putBlockInGrid();
+                            if (!rotate)
+                            {
+                                putBlockInGrid();
+                            }
                             return false;
                         }
-                        
+
                     }
                 }
             }
-
             return true;
         }
 
         public bool canRotate()
         {
             bool[,] temp = activeBlock.blockArray;
-
-            removeBlockFromGrid();
-            activeBlock.RotateCW();
             
-            if (canMove((int)blockPosition.X, (int)blockPosition.Y))
+            removeBlockFromGrid();
+
+            activeBlock.RotateCW();
+
+            if (canMove((int)blockPosition.X, (int)blockPosition.Y, true))
             {
                 activeBlock.blockArray = temp;
                 return true;
@@ -247,7 +268,7 @@ namespace TetrisPrac
         {
             if (inputHelper.KeyPressed(Keys.Left, false))
             {
-                if (canMove((int)blockPosition.X-1, (int)blockPosition.Y))
+                if (canMove((int)blockPosition.X-1, (int)blockPosition.Y, false))
                 {
                     blockPosition.X--;
                 }
@@ -255,7 +276,7 @@ namespace TetrisPrac
             }
             if (inputHelper.KeyPressed(Keys.Right, false))
             {
-                if (canMove((int)blockPosition.X + 1, (int)blockPosition.Y))
+                if (canMove((int)blockPosition.X + 1, (int)blockPosition.Y, false))
                 {
                     blockPosition.X++;
                 }
@@ -266,7 +287,7 @@ namespace TetrisPrac
                 if (canRotate())
                 {
                     activeBlock.RotateCW();
-
+                    putBlockInGrid();
                 }
             }
 
@@ -296,21 +317,21 @@ namespace TetrisPrac
             switch (randomValue)
             {
                 case 0:
-                    return new JBlock(gridblock);
+                    return new JBlock(gridBlockTex);
                 case 1:
-                    return new LBlock(gridblock);
+                    return new LBlock(gridBlockTex);
                 case 2:
-                    return new SBlock(gridblock);
+                    return new SBlock(gridBlockTex);
                 case 3:
-                    return new SquareBlock(gridblock);
+                    return new SquareBlock(gridBlockTex);
                 case 4:
-                    return new TallBlock(gridblock);
+                    return new TallBlock(gridBlockTex);
                 case 5:
-                    return new TBlock(gridblock);
+                    return new TBlock(gridBlockTex);
                 case 6:
-                    return new ZBlock(gridblock);
+                    return new ZBlock(gridBlockTex);
             }
-            return new LBlock(gridblock);
+            return new LBlock(gridBlockTex);
         }
 
     }

@@ -7,3 +7,6 @@ C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.exe
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\obj\x86\Debug\TetrisPrac.pdb
 C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\EmptyBlock.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameGradient.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameHUD.xnb
+C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SmallBlock.xnb
