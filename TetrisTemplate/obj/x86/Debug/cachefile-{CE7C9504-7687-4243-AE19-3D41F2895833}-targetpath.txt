@@ -6,3 +6,7 @@ Content\GameHUD.xnb
 Content\SmallBlock.xnb
 Content\GameBackground.xnb
 Content\SuspicionBar.xnb
+Content\Song.xnb
+Content\Song.wma
+Content\BlockLanding.xnb
+Content\RowClear.xnb

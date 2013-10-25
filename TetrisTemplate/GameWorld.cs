@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 
 /*
@@ -10,68 +11,52 @@ using System;
  */
 namespace TetrisPrac
 {
+    enum GameState
+    {
+        Playing, GameOver, StartScreen
+    }
+
     class GameWorld
     {
-        /*
-         * enum for different game states (playing or game over)
-         */
-        enum GameState
-        {
-            Playing, GameOver
-        }
+   
+        int screenWidth, screenHeight; //game dimensions
 
-        /*
-         * screen width and height
-         */
-        int screenWidth, screenHeight;
-
-        /*
-         * random number generator
-         */
         static Random random;
 
-        Texture2D backgroundTex, gradientTex, HUDTex, suspicionBarTex;
+        Texture2D backgroundTex, gradientTex, HUDTex, suspicionBarTex; //the HUD textures
 
-        Vector2 suspicionBarOffset;
+        Vector2 suspicionBarOffset; //offset for where to draw on the HUD
 
-        int suspicionBarMaxHeight, suspicionBarHeight, suspicionBarMaxWidth;
-        float suspicionValue;
+        int suspicionBarMaxHeight, suspicionBarHeight, suspicionBarMaxWidth; //variables for the suspicion bar
 
-        /*
-         * main game font
-         */
-        SpriteFont font;
+        SpriteFont font; // game font
 
+        public string endString;
 
-        /*
-         * the current game state
-         */
-        GameState gameState;
+        GameState gameState; // the current game state
 
-        /*
-         * the main playing grid
-         */
-        TetrisGrid grid;
+        TetrisGrid grid; // the playing grid
 
         public GameWorld(int width, int height, ContentManager Content)
         {
             screenWidth = width;
             screenHeight = height;
             random = new Random();
-            gameState = GameState.Playing;
+            gameState = GameState.StartScreen;
 
+            MediaPlayer.Play(Content.Load<Song>("Song"));
+
+            //load all the UI textures
             font = Content.Load<SpriteFont>("SpelFont");
-
             backgroundTex = Content.Load<Texture2D>("GameBackground");
             gradientTex = Content.Load<Texture2D>("GameGradient");
             HUDTex = Content.Load<Texture2D>("GameHUD");
             suspicionBarTex = Content.Load<Texture2D>("SuspicionBar");
 
-            suspicionBarOffset = new Vector2(574, 565);
+            //these are the values for where the suspicion bar is located and how wide and high it is
+            suspicionBarOffset = new Vector2(578, 565);
             suspicionBarMaxHeight = (int)suspicionBarOffset.Y - 174;
-            suspicionBarMaxWidth = 677 - (int)suspicionBarOffset.X;
-
-            suspicionValue = 0.8f;
+            suspicionBarMaxWidth = 680 - (int)suspicionBarOffset.X;
 
             grid = new TetrisGrid(Content);
         }
@@ -86,12 +71,20 @@ namespace TetrisPrac
             if (inputHelper.KeyPressed(Keys.R, false))
             {
                 Reset();
-                gameState = GameState.Playing;
+                gameState = GameState.StartScreen;
             }
 
             if (gameState == GameState.Playing)
             {
                 grid.HandleInput(gameTime, inputHelper);
+            }
+
+            if (gameState == GameState.StartScreen)
+            {
+                if (inputHelper.KeyPressed(Keys.Space, false))
+                {
+                    gameState = GameState.Playing;
+                }
             }
         }
 
@@ -100,9 +93,18 @@ namespace TetrisPrac
             if (gameState == GameState.Playing)
             {
                 grid.Update(gameTime);
-                if (grid.gameOver)
+
+                //win conditions
+
+                if (grid.HasReachedTop)
                 {
-                    gameState = GameState.GameOver; 
+                    gameState = GameState.GameOver;
+                    endString = "Player 2 wins!";
+                }
+                if (grid.SuspicionValue > 1)
+                {
+                    gameState = GameState.GameOver;
+                    endString = "Player 1 wins!";
                 }
             }
         }
@@ -111,18 +113,39 @@ namespace TetrisPrac
         {
             spriteBatch.Begin();
 
-            spriteBatch.Draw(backgroundTex, Vector2.Zero, Color.White);
-            spriteBatch.Draw(gradientTex, Vector2.Zero, Color.White);
-            grid.Draw(gameTime, spriteBatch);
-            suspicionBarHeight = (int)(suspicionBarMaxHeight*suspicionValue);
-            spriteBatch.Draw(suspicionBarTex, new Rectangle((int)suspicionBarOffset.X, (int)suspicionBarOffset.Y - suspicionBarHeight, suspicionBarMaxWidth, suspicionBarHeight), Color.White);
+            spriteBatch.Draw(backgroundTex, Vector2.Zero, Color.White); //draw the paper background first
             
-            spriteBatch.Draw(HUDTex, Vector2.Zero, Color.White);
-            
+
+            if (gameState == GameState.Playing)
+            {
+                grid.Draw(gameTime, spriteBatch);
+                suspicionBarHeight = (int)(suspicionBarMaxHeight * grid.SuspicionValue);
+                spriteBatch.Draw(suspicionBarTex, new Rectangle((int)suspicionBarOffset.X, (int)suspicionBarOffset.Y - suspicionBarHeight, suspicionBarMaxWidth, suspicionBarHeight), Color.White);
+                spriteBatch.Draw(HUDTex, Vector2.Zero, Color.White);
+            }
+
+            if (gameState == GameState.StartScreen)
+            {
+                DrawText("ILLUMINATRIS", new Vector2(screenWidth / 2, screenHeight / 2 - 240), spriteBatch);
+
+                DrawText("Player 1: A & D to move, W to rotate and S for fast fall", new Vector2(screenWidth / 2, screenHeight / 2 - 160), spriteBatch);
+                DrawText("Player 2: Num1 through Num7 will change", new Vector2(screenWidth / 2, screenHeight / 2 - 100), spriteBatch);
+                DrawText("the next block that will fall down", new Vector2(screenWidth / 2, screenHeight / 2 - 60), spriteBatch);
+
+                DrawText("Repeating the same blocks and clearing rows will raise suspicion", new Vector2(screenWidth / 2, screenHeight / 2 + 20), spriteBatch);
+                DrawText("If the suspicion bar is full, player 1 wins", new Vector2(screenWidth / 2, screenHeight / 2 + 80), spriteBatch);
+                DrawText("If the blocks reach the top, player 2 wins", new Vector2(screenWidth / 2, screenHeight / 2 + 140), spriteBatch);
+
+                DrawText("Press Space to start", new Vector2(screenWidth / 2, screenHeight / 2 + 240), spriteBatch);
+            }
+
             if (gameState == GameState.GameOver)
             {
-                DrawText("Game Over Loser.\nMuhahaha\npress r to restart.", new Vector2(screenWidth, screenHeight) / 2, spriteBatch);
+                DrawText(endString, new Vector2(screenWidth / 2, screenHeight / 2 - 150), spriteBatch);
+                DrawText("Press R to restart", new Vector2(screenWidth / 2, screenHeight / 2 + 100), spriteBatch);
             }
+            
+            spriteBatch.Draw(gradientTex, Vector2.Zero, Color.White); //draw the gradient overlay last
             spriteBatch.End();    
         }
 
@@ -131,7 +154,8 @@ namespace TetrisPrac
          */
         public void DrawText(string text, Vector2 positie, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, text, positie, Color.Blue);
+            Vector2 offset = font.MeasureString(text);
+            spriteBatch.DrawString(font, text, positie - offset/2, new Color(0,0,0,0.76f));
         }
 
         public static Random Random

@@ -17,7 +17,7 @@
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SpelFont.xnb</Output>
-      <Time>2010-09-18T17:04:46+02:00</Time>
+      <Time>2013-10-16T21:08:12.4012813+02:00</Time>
     </Item>
     <Item>
       <Source>EmptyBlock.png</Source>
@@ -44,7 +44,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\GameHUD.xnb</Output>
-      <Time>2013-10-16T16:08:50.8457176+02:00</Time>
+      <Time>2013-10-17T00:47:02.041855+02:00</Time>
     </Item>
     <Item>
       <Source>SmallBlock.png</Source>
@@ -72,6 +72,34 @@
       <Options>None</Options>
       <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\SuspicionBar.xnb</Output>
       <Time>2013-10-16T16:41:05.0168181+02:00</Time>
+    </Item>
+    <Item>
+      <Source>Song.mp3</Source>
+      <Name>Song</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\Song.xnb</Output>
+      <Extra>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\Song.wma</Extra>
+      <Time>2013-10-17T00:01:15.5234994+02:00</Time>
+    </Item>
+    <Item>
+      <Source>BlockLanding.wav</Source>
+      <Name>BlockLanding</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\BlockLanding.xnb</Output>
+      <Time>2013-10-17T00:08:12.5801428+02:00</Time>
+    </Item>
+    <Item>
+      <Source>RowClear.wav</Source>
+      <Name>RowClear</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Koning\Documents\GitHub\Game_Programmeren\TetrisTemplate\bin\x86\Debug\Content\RowClear.xnb</Output>
+      <Time>2013-10-17T00:32:22.474+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

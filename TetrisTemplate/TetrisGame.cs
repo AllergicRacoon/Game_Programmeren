@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace TetrisPrac
 {
@@ -26,6 +27,7 @@ namespace TetrisPrac
             // set the desired window size
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
+            graphics.ToggleFullScreen();
 
             // create the input helper object
             inputHelper = new InputHelper();
@@ -45,6 +47,11 @@ namespace TetrisPrac
             inputHelper.Update(gameTime);
             gameWorld.HandleInput(gameTime, inputHelper);
             gameWorld.Update(gameTime);
+
+            if (inputHelper.KeyPressed(Keys.Escape, false))
+            {
+                this.Exit();
+            }
             
         }
 
